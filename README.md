@@ -1,3 +1,5 @@
+![alt text](img/image.png)
+
 # lifegameConway-react
 
 Uma implementação do famoso **Jogo da Vida** de Conway utilizando React.js.
