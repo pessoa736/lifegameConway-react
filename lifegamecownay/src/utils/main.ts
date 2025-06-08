@@ -5,9 +5,9 @@ import { randomInt } from "./random";
 
 // Defina o tamanho do ambiente
 
-const size = 2;
-const WIDTH = 240/size;
-const HEIGHT = 136/size;
+const size = 16;
+let WIDTH:number = 240/size;
+let HEIGHT:number = 136/size;
 let t = 0
 
 // Agora ambient é uma matriz bidimensional
@@ -76,7 +76,9 @@ const updateAmbiente = () => {
 }
 
 let Game = {
-    init: () => {
+    init: () => { 
+        WIDTH = window.innerWidth/size;
+        HEIGHT = window.innerWidth/size;       
         ambient = createAmbient(()=> randomInt(0, 1));
         addpoint(1, 1, 1); 
     },
@@ -87,9 +89,7 @@ let Game = {
     draw: (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
         ctx.clearRect(0, 0, 1000, 1000);
         ctx.save()
-        let scx = canvas.width/(WIDTH*size)
-        let scy = canvas.height/(HEIGHT*size)
-        ctx.scale(scx, scy)
+        ctx.scale(1, 1)
         drawPoints(ctx);
         ctx.restore()
     }

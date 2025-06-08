@@ -1,4 +1,4 @@
-import { Box, Card, Center, ChakraProvider, Heading, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Card, Center, ChakraProvider, Heading, Text, VStack } from "@chakra-ui/react";
 import GameCanvas from "lgc/components/gameCanvas";
 
 
@@ -16,6 +16,10 @@ export default function App() {
                 LifeGame Cownay in React.js
               </Text>
             </Card.Header>
+            <Card.Body mt={4} gap={4}>
+              <Button> Visualizar </Button>
+              <Button> Desenhar </Button>
+            </Card.Body>
           </Card.Root>
         </Center>
     </>

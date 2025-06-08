@@ -5,9 +5,9 @@ import { useEffect, useRef } from "react";
 
 const GameCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  Game.init()
   
   useEffect(() => {
+    Game.init()
     const canvas = canvasRef.current;
     if (!canvas) return;
     canvas.width = window.innerWidth
