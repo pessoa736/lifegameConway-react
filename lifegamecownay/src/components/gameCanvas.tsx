@@ -10,18 +10,19 @@ const GameCanvas = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    canvas.width = window.outerWidth
-    canvas.height = window.outerHeight
-
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
 
     let animationId: number;
 
-    const draw = () => {
+    const draw = () => {    
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
       Game.update()
-      Game.draw(ctx, canvas);
+      Game.draw(ctx, canvas)
       animationId = requestAnimationFrame(draw);
     };
 
@@ -33,7 +34,7 @@ const GameCanvas = () => {
 
   }, []);
 
-  return <canvas ref={canvasRef} />;
+  return <canvas ref={canvasRef} style={{width: "100%"}}/>;
 };
 
 export default GameCanvas;

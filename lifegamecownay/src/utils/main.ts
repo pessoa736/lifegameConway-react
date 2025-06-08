@@ -66,7 +66,7 @@ const updateAmbiente = () => {
                 }
             }
             if (ambient[x][y].alive) {
-                nextAmbient[x][y].alive = (aliveNeighbors === 2 || aliveNeighbors === 3) ? 1 : 0;
+                nextAmbient[x][y].alive = (aliveNeighbors === 3 || aliveNeighbors === 2) ? 1 : 0;
             } else {
                 nextAmbient[x][y].alive = (aliveNeighbors === 3) ? 1 : 0;
             }
@@ -87,7 +87,9 @@ let Game = {
     draw: (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
         ctx.clearRect(0, 0, 1000, 1000);
         ctx.save()
-        
+        let scx = canvas.width/(WIDTH*size)
+        let scy = canvas.height/(HEIGHT*size)
+        ctx.scale(scx, scy)
         drawPoints(ctx);
         ctx.restore()
     }
