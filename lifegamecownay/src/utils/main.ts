@@ -8,6 +8,7 @@ import { randomInt } from "./random";
 const size = 2;
 const WIDTH = 240/size;
 const HEIGHT = 136/size;
+let t = 0
 
 // Agora ambient é uma matriz bidimensional
 let ambient: { pos: ReturnType<typeof vec>, alive: number }[][] = [];
@@ -17,7 +18,7 @@ const createAmbient = (f?) => {
     for (let x = 0; x < WIDTH; x++) {
         const row = [];
         for (let y = 0; y < HEIGHT; y++) {
-            row.push({ pos: vec(x * size + x*0.5, y * size + y*0.5), alive: f() | 0 });
+            row.push({ pos: vec(x * size + x*0.15, y * size + y*0.15), alive: f() | 0 });
         }
         arr.push(row);
     }
@@ -43,22 +44,50 @@ const drawPoints = (ctx: CanvasRenderingContext2D) => {
     }
 };
 
+const updateAmbiente = () => {
+    // Cria uma cópia do estado atual
+    const nextAmbient = createAmbient(() => 0);
+
+    for (let x = 0; x < WIDTH; x++) {
+        for (let y = 0; y < HEIGHT; y++) {
+            let aliveNeighbors = 0;
+            for (let dx = -1; dx <= 1; dx++) {
+                for (let dy = -1; dy <= 1; dy++) {
+                    if (dx === 0 && dy === 0) continue;
+                    const nx = x + dx;
+                    const ny = y + dy;
+                    if (
+                        nx >= 0 && nx < WIDTH &&
+                        ny >= 0 && ny < HEIGHT &&
+                        ambient[nx][ny].alive
+                    ) {
+                        aliveNeighbors++;
+                    }
+                }
+            }
+            if (ambient[x][y].alive) {
+                nextAmbient[x][y].alive = (aliveNeighbors === 2 || aliveNeighbors === 3) ? 1 : 0;
+            } else {
+                nextAmbient[x][y].alive = (aliveNeighbors === 3) ? 1 : 0;
+            }
+        }
+    }
+    ambient = nextAmbient;
+}
+
 let Game = {
     init: () => {
         ambient = createAmbient(()=> randomInt(0, 1));
         addpoint(1, 1, 1); 
     },
     update: () => {
-        // lógica de atualização aqui
+        if (t%5 == 0) updateAmbiente();
+        t=t+1
     },
     draw: (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
         ctx.clearRect(0, 0, 1000, 1000);
-
         ctx.save()
-        let x = canvas.clientWidth/WIDTH
-        let y = canvas.clientHeight/HEIGHT
-        console.log(x)
-        ctx.scale(x,y)
+        
         drawPoints(ctx);
         ctx.restore()
     }

@@ -3,12 +3,11 @@ import Game  from "lgc/utils/main";
 import { useEffect, useRef } from "react";
 
 
-const GameCanvas: React.FC = () => {
+const GameCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   Game.init()
   
   useEffect(() => {
-    Game.update()
     const canvas = canvasRef.current;
     if (!canvas) return;
     canvas.width = window.outerWidth
@@ -21,6 +20,7 @@ const GameCanvas: React.FC = () => {
     let animationId: number;
 
     const draw = () => {
+      Game.update()
       Game.draw(ctx, canvas);
       animationId = requestAnimationFrame(draw);
     };
@@ -33,10 +33,7 @@ const GameCanvas: React.FC = () => {
 
   }, []);
 
-  return <canvas ref={canvasRef} style={{
-    width: "100%",
-    height: "100%"
-  }} />;
+  return <canvas ref={canvasRef} />;
 };
 
 export default GameCanvas;
