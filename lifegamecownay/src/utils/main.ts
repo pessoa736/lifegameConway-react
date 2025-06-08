@@ -124,6 +124,13 @@ let Game = {
             canvas.addEventListener('mouseup', () => {
                 mouse.click = false;
             });
+
+            window.addEventListener("keydown", (e) =>{
+                console.log(e.key)
+                if (e.key === "e") {
+                    pause = !pause
+                }
+            })
         }
         
         addpoint(1, 1, 1); 
