@@ -3,13 +3,14 @@ import Game  from "lgc/utils/main";
 import { useEffect, useRef } from "react";
 
 
-const GameCanvas = () => {
+const GameCanvas = ({state}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   
   useEffect(() => {
-    Game.init()
     const canvas = canvasRef.current;
     if (!canvas) return;
+    
+    Game.init(state, canvas)
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
     const ctx = canvas.getContext("2d");

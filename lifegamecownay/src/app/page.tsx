@@ -1,4 +1,4 @@
-import { Box, Button, Card, Center, ChakraProvider, Heading, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Card, Center, ChakraProvider, Heading, Link, Text, VStack } from "@chakra-ui/react";
 import GameCanvas from "lgc/components/gameCanvas";
 
 
@@ -7,7 +7,7 @@ export default function App() {
   return (
     <>
       <Box  bg="pri"  w="full" position={"absolute"} >
-        <GameCanvas />
+        <GameCanvas state={"menuView"}/>
       </Box>
       <Center h={"100vh"}>
           <Card.Root alignSelf="center" >
@@ -17,11 +17,16 @@ export default function App() {
               </Text>
             </Card.Header>
             <Card.Body mt={4} gap={4}>
-              <Button> Visualizar </Button>
-              <Button> Desenhar </Button>
+              <Button asChild> 
+                <Link href="./view" textDecor={"none"}> Visualizar </Link> 
+              </Button>
+              <Button asChild> 
+                <Link href="./draw" textDecor={"none"}> Desenhar </Link>  
+              </Button>
             </Card.Body>
           </Card.Root>
         </Center>
     </>
   );
 }
+
