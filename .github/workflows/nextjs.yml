@@ -34,7 +34,7 @@ jobs:
       - name: Detect package manager
         id: detect-package-manager
         run: |
-          ls -la "${{ github.workspace }}"
+          ls -la "${{ github.workspace }}/lifegameConway-react"
           if [ -f "${{ github.workspace }}/lifegameConway-react/package.json" ]; then
             echo "manager=npm" >> $GITHUB_OUTPUT
             echo "command=ci" >> $GITHUB_OUTPUT
