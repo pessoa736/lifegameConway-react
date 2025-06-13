@@ -33,7 +33,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Detect package manager
         id: detect-package-manager
-        working-directory: ./lifegamecownay
         run: |
           if [ -f "${{ github.workspace }}/lifegamecownay/package.json" ]; then
             echo "manager=npm" >> $GITHUB_OUTPUT
@@ -47,13 +46,11 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          working-directory: ./lifegamecownay
           node-version: "20"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
-          working-directory: ./lifegamecownay
           # Automatically inject basePath in your Next.js configuration file and disable
           # server side image optimization (https://nextjs.org/docs/api-reference/next/image#unoptimized).
           #
@@ -62,7 +59,6 @@ jobs:
       - name: Restore cache
         uses: actions/cache@v4
         with:
-          working-directory: ./lifegamecownay
           path: |
             .next/cache
           # Generate a new cache whenever packages or source files change.
@@ -71,15 +67,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
-        working-directory: ./lifegamecownay
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
-        working-directory: ./lifegamecownay
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          working-directory: ./lifegamecownay
           path: ./out
 
   # Deployment job
