@@ -34,8 +34,8 @@ jobs:
       - name: Detect package manager
         id: detect-package-manager
         run: |
-          ls -la "${{ github.workspace }}/lifegameconway"
-          if [ -f "${{ github.workspace }}/lifegameconway/package.json" ]; then
+          ls -la "${{ github.workspace }}/lifegamecownay"
+          if [ -f "${{ github.workspace }}/lifegamecownay/package.json" ]; then
             echo "manager=npm" >> $GITHUB_OUTPUT
             echo "command=ci" >> $GITHUB_OUTPUT
             echo "runner=npx --no-install" >> $GITHUB_OUTPUT
@@ -48,6 +48,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          run: |
+            ls -la "${{ steps.detect-package-manager.outputs.manager }}"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
       - name: Setup Pages
         uses: actions/configure-pages@v5
