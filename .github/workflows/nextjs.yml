@@ -31,22 +31,22 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            lifegameconway/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('lifegameconway/package-lock.json') }}-${{ hashFiles('lifegameconway/**/*.[jt]s', 'lifegameconway/**/*.[jt]sx') }}
+            lifegamecownay/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('lifegamecownay/package-lock.json') }}-${{ hashFiles('lifegamecownay/**/*.[jt]s', 'lifegamecownay/**/*.[jt]sx') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('lifegameconway/package-lock.json') }}-
+            ${{ runner.os }}-nextjs-${{ hashFiles('lifegamecownay/package-lock.json') }}-
       
       - name: Install dependencies
         run: npm ci
-        working-directory: lifegameconway
+        working-directory: lifegamecownay
       
       - name: Build with Next.js
         run: npx --no-install next build
-        working-directory: lifegameconway
+        working-directory: lifegamecownay
       
       - name: Export static site
         run: npx --no-install next export -o ../out
-        working-directory: lifegameconway
+        working-directory: lifegamecownay
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
