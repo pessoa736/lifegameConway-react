@@ -46,7 +46,7 @@ jobs:
         working-directory: lifegamecownay
 
       - name: Export static site
-        run: npx --no-install next export && mv out ../out
+        run: npx --no-install next build && mv out ../out
         working-directory: lifegamecownay
 
       - name: Upload artifact
