@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  basePath: "/lifegame",
   output: "export",  
   reactStrictMode: true,
   webpack(config) {
