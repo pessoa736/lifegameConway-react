@@ -4,149 +4,142 @@ import vec from "./vec2"
 import { randomInt } from "./random";
 import { CanvasHTMLAttributes } from "react";
 
-// Defina o tamanho do ambiente
+const Game = {
+    pause: false,
+    size: 16,
+    WIDTH: 240/16,
+    HEIGHT: 136/16,
+    t: 0,
+    State: "menuView",
+    mouse: {
+        x: 0,
+        y: 0,
+        click: false
+    },
+    ambient: [] as { pos: ReturnType<typeof vec>, alive: number }[][],
 
-const size = 16;
-let WIDTH:number = 240/size;
-let HEIGHT:number = 136/size;
-
-let t: number = 0
-
-let pause:boolean = false
-let State: string = "menuView"
-
-let mouse = {
-    x: 0,
-    y: 0,
-    click: false
-}
-
-// Agora ambient é uma matriz bidimensional
-let ambient: { pos: ReturnType<typeof vec>, alive: number }[][] = [];
-
-const createAmbient = (f?) => {
-    const arr = [];
-    for (let x = 0; x < WIDTH; x++) {
-        const row = [];
-        for (let y = 0; y < HEIGHT; y++) {
-            row.push({ pos: vec(x * size + x*0.15, y * size + y*0.15), alive: f() | 0 });
-        }
-        arr.push(row);
-    }
-    return arr;
-};
-
-const addpoint = (x: number, y: number, alive = 0) => {
-    if (ambient[x] && ambient[x][y]) {
-        ambient[x][y].alive = alive;
-    }
-};
-
-const drawPoints = (ctx: CanvasRenderingContext2D) => {
-    for (let x = 0; x < WIDTH; x++) {
-        for (let y = 0; y < HEIGHT; y++) {
-            const point = ambient[x][y];
-            if (point.alive == 1) {
-                draw.rect(ctx, point.pos, vec(size, size), "#ffffee");
-            } else {
-                draw.rect(ctx, point.pos, vec(size, size), "#000011");
+    createAmbient(f?) {
+        const arr = [];
+        for (let x = 0; x < this.WIDTH; x++) {
+            const row = [];
+            for (let y = 0; y < this.HEIGHT; y++) {
+                row.push({ pos: vec(x * this.size + x*0.15, y * this.size + y*0.15), alive: f ? f() | 0 : 0 });
             }
+            arr.push(row);
         }
-    }
-};
+        return arr;
+    },
 
-const updateAmbiente = () => {
-    // Cria uma cópia do estado atual
-    const nextAmbient = createAmbient(() => 0);
+    addpoint(x: number, y: number, alive = 0) {
+        if (this.ambient[x] && this.ambient[x][y]) {
+            this.ambient[x][y].alive = alive;
+        }
+    },
 
-    for (let x = 0; x < WIDTH; x++) {
-        for (let y = 0; y < HEIGHT; y++) {
-            let aliveNeighbors = 0;
-            for (let dx = -1; dx <= 1; dx++) {
-                for (let dy = -1; dy <= 1; dy++) {
-                    if (dx === 0 && dy === 0) continue;
-                    const nx = x + dx;
-                    const ny = y + dy;
-                    if (
-                        nx >= 0 && nx < WIDTH &&
-                        ny >= 0 && ny < HEIGHT &&
-                        ambient[nx][ny].alive
-                    ) {
-                        aliveNeighbors++;
-                    }
+    drawPoints(ctx: CanvasRenderingContext2D) {
+        for (let x = 0; x < this.WIDTH; x++) {
+            for (let y = 0; y < this.HEIGHT; y++) {
+                const point = this.ambient[x][y];
+                if (point.alive == 1) {
+                    draw.rect(ctx, point.pos, vec(this.size, this.size), "#ffffee");
+                } else {
+                    draw.rect(ctx, point.pos, vec(this.size, this.size), "#000011");
                 }
             }
-            if (ambient[x][y].alive) {
-                nextAmbient[x][y].alive = (aliveNeighbors === 3 || aliveNeighbors === 2) ? 1 : 0;
-            } else {
-                nextAmbient[x][y].alive = (aliveNeighbors === 3) ? 1 : 0;
+        }
+    },
+
+    updateAmbiente() {
+        const nextAmbient = this.createAmbient(() => 0);
+
+        for (let x = 0; x < this.WIDTH; x++) {
+            for (let y = 0; y < this.HEIGHT; y++) {
+                let aliveNeighbors = 0;
+                for (let dx = -1; dx <= 1; dx++) {
+                    for (let dy = -1; dy <= 1; dy++) {
+                        if (dx === 0 && dy === 0) continue;
+                        const nx = x + dx;
+                        const ny = y + dy;
+                        if (
+                            nx >= 0 && nx < this.WIDTH &&
+                            ny >= 0 && ny < this.HEIGHT &&
+                            this.ambient[nx][ny].alive
+                        ) {
+                            aliveNeighbors++;
+                        }
+                    }
+                }
+                if (this.ambient[x][y].alive) {
+                    nextAmbient[x][y].alive = (aliveNeighbors === 3 || aliveNeighbors === 2) ? 1 : 0;
+                } else {
+                    nextAmbient[x][y].alive = (aliveNeighbors === 3) ? 1 : 0;
+                }
             }
         }
-    }
-    ambient = nextAmbient;
-}
+        this.ambient = nextAmbient;
+    },
 
-const addANewPointInAmbient = (x: number, y: number) => {
-    addpoint(x, y, 1);
-}
+    addANewPointInAmbient(x: number, y: number) {
+        this.addpoint(x, y, 1);
+    },
 
-let Game = {
-    init: (state? : string, canvas?: HTMLCanvasElement) => { 
-        State = state
-        WIDTH = window.innerWidth/size;
-        HEIGHT = window.innerWidth/size;
-        if (State === "draw"){
-            ambient = createAmbient(()=>0);
-            pause = true
-        }else{
-            ambient = createAmbient(()=> randomInt(0, 1));
+    init(state?: string, canvas?: HTMLCanvasElement) {
+        this.State = state || this.State;
+        this.WIDTH = window.innerWidth / this.size;
+        this.HEIGHT = window.innerWidth / this.size;
+        if (this.State === "draw") {
+            this.ambient = this.createAmbient(() => 0);
+            this.pause = true;
+        } else {
+            this.ambient = this.createAmbient(() => randomInt(0, 1));
         }
 
-        if (State === "draw"){
+        if (this.State === "draw" && canvas) {
             canvas.addEventListener('mousemove', (event) => {
                 const rect = canvas.getBoundingClientRect();
-                mouse.x = event.clientX - rect.left;
-                mouse.y = event.clientY - rect.top;
-                // console.log('Mouse:', mouse.x, mouse.y);
+                this.mouse.x = event.clientX - rect.left;
+                this.mouse.y = event.clientY - rect.top;
             });
 
             canvas.addEventListener('mousedown', (event) => {
                 const rect = canvas.getBoundingClientRect();
-                mouse.x = event.clientX - rect.left;
-                mouse.y = event.clientY - rect.top;
-                mouse.click = true;
-                
-                const cellX = Math.floor(mouse.x / size);
-                const cellY = Math.floor(mouse.y / size);
-                addANewPointInAmbient(cellX, cellY);
+                this.mouse.x = event.clientX - rect.left;
+                this.mouse.y = event.clientY - rect.top;
+                this.mouse.click = true;
+
+                const cellX = Math.floor(this.mouse.x / this.size);
+                const cellY = Math.floor(this.mouse.y / this.size);
+                this.addANewPointInAmbient(cellX, cellY);
             });
 
             canvas.addEventListener('mouseup', () => {
-                mouse.click = false;
+                this.mouse.click = false;
             });
-
-            window.addEventListener("keydown", (e) =>{
-                console.log(e.key)
-                if (e.key === "e") {
-                    pause = !pause
-                }
-            })
         }
-        
-        addpoint(1, 1, 1); 
+
+        this.addpoint(1, 1, 1);
     },
-    update: () => {
-        if (t%5 == 1) {updateAmbiente()};
-       
-        if (pause === false){t+=1} 
+
+    set_pause(val: boolean){
+        this.pause = val
     },
-    draw: (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
+
+    update() {
+        if (this.t % 5 == 1) {
+            this.updateAmbiente();
+        }
+        if (this.pause === false) {
+            this.t += 1;
+        }
+    },
+
+    draw(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
         ctx.clearRect(0, 0, 1000, 1000);
-        ctx.save()
-        ctx.scale(1, 1)
-        drawPoints(ctx);
-        ctx.restore()
+        ctx.save();
+        ctx.scale(1, 1);
+        this.drawPoints(ctx);
+        ctx.restore();
     }
 };
 
-export default Game
+export default Game;

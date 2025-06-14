@@ -1,13 +1,22 @@
-import { Box } from "@chakra-ui/react";
+"use client";
+import { Box, Text } from "@chakra-ui/react";
 import GameCanvas from "lgc/components/gameCanvas";
 import ToolBar from "lgc/components/toolBar";
 
 export default function Draw(){
+    let list = [
+        {
+            func: () => {
+                Game.set_pause(!Game.pause)
+            }, 
+            children: (<Text>pause</Text>)},
+    ]
+
     return (
         <>
             <Box  bg="pri"  w="full" position={"absolute"} >
                 <GameCanvas state={"draw"}/>
-                <ToolBar />
+                <ToolBar list={list}/>
             </Box>
         </>
     )
