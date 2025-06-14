@@ -2,7 +2,6 @@ import { Box, Button, Card, Center, ChakraProvider, Heading, Link, Text, VStack 
 import GameCanvas from "lgc/components/gameCanvas";
 
 
-
 export default function App() {
   return (
     <>
@@ -18,10 +17,10 @@ export default function App() {
             </Card.Header>
             <Card.Body mt={4} gap={4}>
               <Button asChild> 
-                <Link href="./view" textDecor={"none"}> Visualizar </Link> 
+                <Link href="lifegame/view" textDecor={"none"}> Visualizar </Link> 
               </Button>
               <Button asChild> 
-                <Link href="./draw" textDecor={"none"}> Desenhar </Link>  
+                <Link href="lifegame/draw" textDecor={"none"}> Desenhar </Link>  
               </Button>
             </Card.Body>
           </Card.Root>
