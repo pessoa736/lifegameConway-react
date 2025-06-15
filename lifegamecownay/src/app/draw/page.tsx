@@ -7,7 +7,7 @@ export default function Draw(){
     let list = [
         {
             func: () => {
-                Game.set_pause(!Game.pause)
+                window.Game.set_pause(!window.Game.pause)
             }, 
             children: (<Text>pause</Text>)},
     ]
