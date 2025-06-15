@@ -37,7 +37,7 @@ export default function Draw() {
             init: () => ({
                 click: drawMode === "draw"
             }),
-            icon: "./sprites/lapiz.png"
+            icon: "/sprites/lapiz.png"
         },
         {
             _onclick: () => {
@@ -47,7 +47,7 @@ export default function Draw() {
             init: () => ({
                 click: drawMode === "erase"
             }),
-            icon: "./sprites/borracha.png"
+            icon: "/sprites/borracha.png"
         },
         {
             _onclick: () => {

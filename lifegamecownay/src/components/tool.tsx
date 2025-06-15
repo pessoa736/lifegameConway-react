@@ -1,4 +1,4 @@
-import { Box, Center, Image  } from "@chakra-ui/react";
+import { Box, Center, Image as IMG } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 interface ToolProps {
@@ -14,12 +14,21 @@ interface MetaTool {
 export default function Tool({ props }: MetaTool) {
     const [clicked, setClicked] = useState<boolean>(false);
     const [children, setChildren] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const initResult = props.init();
         setChildren(initResult.children);
         setClicked(initResult.click);
     }, [props]);
+
+    useEffect(() => {
+        setIsLoading(true);
+        const img = new Image(64, 64);
+        img.src = props.icon || "";
+        img.onload = () => setIsLoading(false);
+        img.onerror = () => setIsLoading(false); // Tratar erro, se necessário
+    }, [props.icon]);
 
     const OnClick = () => {
         if (props._onclick) {
@@ -41,7 +50,11 @@ export default function Tool({ props }: MetaTool) {
             p={1}
             onClick={OnClick}
         >
-            {props.icon && <Image src={props.icon} alt="icon" mx="auto" mb={1} width={"100%"} imageRendering={"pixelated"}/>}
+            {isLoading ? (
+                <Center>Carregando...</Center>
+            ) : (
+                props.icon && <IMG src={props.icon} alt="icon" mx="auto" mb={1} width={"100%"} imageRendering={"pixelated"} />
+            )}
             <Center textAlign={"center"}>{children}</Center>
         </Box>
     );
