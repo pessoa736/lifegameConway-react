@@ -5,9 +5,7 @@ import { randomInt } from "./random";
 import { CanvasHTMLAttributes } from "react";
 
 declare global {
-    interface Window{
-        Game: any
-    }
+    var Game: any
 }
 
 if (typeof window !== "undefined") {
@@ -30,7 +28,7 @@ if (typeof window !== "undefined") {
             for (let x = 0; x < this.WIDTH; x++) {
                 const row = [];
                 for (let y = 0; y < this.HEIGHT; y++) {
-                    row.push({ pos: vec(x * this.size + x*0.15, y * this.size + y*0.15), alive: f ? f() | 0 : 0 });
+                    row.push({ pos: vec(x * this.size + x*0.15, y * this.size + y*0.15), alive: f ? f() : 0 });
                 }
                 arr.push(row);
             }
@@ -86,6 +84,10 @@ if (typeof window !== "undefined") {
             this.ambient = nextAmbient;
         },
 
+        limparAmbient(){
+            this.ambient = this.createAmbient()
+        },
+
         addANewPointInAmbient(x: number, y: number) {
             this.addpoint(x, y, 1);
         },
@@ -106,6 +108,11 @@ if (typeof window !== "undefined") {
                     const rect = canvas.getBoundingClientRect();
                     this.mouse.x = event.clientX - rect.left;
                     this.mouse.y = event.clientY - rect.top;
+                    if (this.mouse.click) {
+                        const cellX = Math.floor(this.mouse.x / this.size);
+                        const cellY = Math.floor(this.mouse.y / this.size);
+                        this.addANewPointInAmbient(cellX, cellY);
+                    }
                 });
 
                 canvas.addEventListener('mousedown', (event) => {
@@ -123,8 +130,6 @@ if (typeof window !== "undefined") {
                     this.mouse.click = false;
                 });
             }
-
-            this.addpoint(1, 1, 1);
         },
 
         set_pause(val: boolean){

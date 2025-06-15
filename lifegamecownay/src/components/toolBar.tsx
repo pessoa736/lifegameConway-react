@@ -1,47 +1,48 @@
 "use client"
-import { Box, Center, Grid, GridItem, Text } from "@chakra-ui/react";
+import { Box, Center, Grid, GridItem } from "@chakra-ui/react";
 import Tool from "./tool";
 
-
-
-
-export default function ToolBar({list}){
-    let size_tools = 60
- 
-    return (
-        <>
-            <Center>
-                <Box 
-                    position="fixed" 
-                    bg="sec" 
-                    bottom="0" 
-                    m="4" 
-                    w={list.length*(size_tools+11)} 
-                    h="75px" 
-                    borderRadius="2xl"
-                    >
-                    <Grid 
-                        m="5px" 
-                        templateColumns={`repeat(auto-fit, ${size_tools}px)`} 
-                        templateRows="1fr"  
-                        gapX="2" 
-                        justifyItems="center"
-                        justifyContent="center"
-                        >
-                            {list.map(
-                                (T, idx) => {
-                                    return (
-                                        <GridItem key={idx} w={`${size_tools}px`} h={`${size_tools}px`} > 
-                                            <Tool func={T?.func}>{T?.children}</Tool>
-                                        </GridItem>
-                                    )
-                                }
-                            )}
-                    </Grid>
-                </Box>
-            </Center>
-        </>
-    )
+interface ToolProps {
+    _onclick?: (clicked?: boolean) => any,
+    init: () => any
 }
 
+interface ToolBarProps {
+    list: ToolProps[]
+}
 
+export default function ToolBar({ list }: ToolBarProps) {
+    const size_tools = 70;
+    const spacing = 11;
+    const width = list.length * (size_tools + spacing);
+    const height = size_tools + 10
+
+    return (
+        <Center>
+            <Box
+                position="fixed"
+                bg="sec"
+                bottom="0"
+                m="4"
+                w={`${width}px`}
+                h={`${height}px`}
+                borderRadius="2xl"
+            >
+                <Grid
+                    m="5px"
+                    templateColumns={`repeat(${list.length}, ${size_tools}px)`}
+                    templateRows="1fr"
+                    gapX="2"
+                    justifyItems="center"
+                    justifyContent="center"
+                >
+                    {list.map((T, idx) => (
+                        <GridItem key={idx} w={`${size_tools}px`} h={`${size_tools}px`}>
+                            <Tool props={T} />
+                        </GridItem>
+                    ))}
+                </Grid>
+            </Box>
+        </Center>
+    );
+}
