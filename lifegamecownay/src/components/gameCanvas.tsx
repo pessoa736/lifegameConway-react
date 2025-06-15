@@ -1,7 +1,6 @@
 "use client"
-import Game  from "lgc/utils/main";
 import { useEffect, useRef } from "react";
-
+import "../utils/main"
 
 const GameCanvas = ({state}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -10,22 +9,22 @@ const GameCanvas = ({state}) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
-    Game.init(state, canvas)
+    window.Game.init(state, canvas)
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-
 
     let animationId: number;
 
     const draw = () => {    
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
-      Game.update()
-      Game.draw(ctx, canvas)
+      window.Game.update()
+      window.Game.draw(ctx, canvas)
       animationId = requestAnimationFrame(draw);
     };
+
 
     draw();
 
@@ -33,7 +32,7 @@ const GameCanvas = ({state}) => {
       cancelAnimationFrame(animationId);
     };
 
-  }, []);
+  }, [state]);
 
   return <canvas ref={canvasRef} style={{width: "100%"}}/>;
 };

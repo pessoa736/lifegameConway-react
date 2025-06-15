@@ -1,8 +1,13 @@
 import type { NextConfig } from "next";
 
+
+const isDeploy = process.env.NEXT_PUBLIC_DEPLOY === "true";
+
 const nextConfig: NextConfig = {
-  basePath: "/lifegame",
-  output: "export",  
+  ...(isDeploy && { 
+    output: "export",
+    basePath: "/lifegame" 
+  }), 
   reactStrictMode: true,
   webpack(config) {
     config.module.rules.push({
