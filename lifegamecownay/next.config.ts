@@ -5,9 +5,9 @@ const isDeploy = process.env.NEXT_PUBLIC_DEPLOY === "true";
 
 const nextConfig: NextConfig = {
   ...(isDeploy && { 
-    output: "export",
     basePath: "/lifegame" 
   }), 
+  output: "export",
   reactStrictMode: true,
   webpack(config) {
     config.module.rules.push({
