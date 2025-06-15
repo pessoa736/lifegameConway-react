@@ -5,7 +5,7 @@ import { randomInt } from "./random";
 import { CanvasHTMLAttributes } from "react";
 
 declare global {
-    var Game: any
+    var Game: any & {pause: boolean}
 }
 
 if (typeof window !== "undefined") {
@@ -86,6 +86,10 @@ if (typeof window !== "undefined") {
 
         limparAmbient(){
             this.ambient = this.createAmbient()
+        },
+
+        paga_pixel(x: number, y: number){
+            this.addANewPoint(x, y,0)
         },
 
         addANewPointInAmbient(x: number, y: number) {

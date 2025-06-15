@@ -6,48 +6,55 @@ import { useState, useRef, useEffect } from "react";
 
 export default function Draw() {
     const [secondClicked, setSecondClicked] = useState(false);
+    const [paused, setPaused] = useState(true); // novo estado
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         if (secondClicked) {
             timerRef.current = setTimeout(() => {
                 setSecondClicked(false);
-            }, 200); // 1000ms ≈ 60 frames a 60fps
+            }, 200);
         }
         return () => {
             if (timerRef.current) clearTimeout(timerRef.current);
         };
     }, [secondClicked]);
 
-    let list = [
+    const list = [
         {
-            _onclick: (clicked = false) => {
-                let children;
-                if (!clicked) {
-                    children = (<Text>pause</Text>);
-                } else {
-                    children = (<Text>retomar</Text>);
-                }
-                window.Game.set_pause(!window.Game.pause);
-
-                return { children, click: !clicked };
+            _onclick: () => {
+                setPaused(true);
+                window.Game.set_pause(true);
+                return { children: <Text>pause</Text>, click: true };
             },
-            init: () => ({ children: (<Text>retomar</Text>), click: false })
+            init: () => ({
+                children: <Text>pause</Text>,
+                click: paused // ativo só se pausado
+            })
+        },
+        {
+            _onclick: () => {
+                setPaused(false);
+                window.Game.set_pause(false);
+                return { children: <Text>run</Text>, click: true };
+            },
+            init: () => ({
+                children: <Text>run</Text>,
+                click: !paused // ativo só se rodando
+            })
         },
         {
             _onclick: () => {
                 setSecondClicked(true);
-                window.Game.limparAmbient()
+                window.Game.limparAmbient();
                 return { children: (<Text>limpar tela</Text>), click: true };
             },
-            init: () => ({ children: (<Text>limpar tela</Text>), click: secondClicked })
+            init: () => ({
+                children: secondClicked ? (<Text>limpando</Text>) : (<Text>limpar tela</Text>),
+                click: secondClicked
+            })
         },
     ];
-
-    list[1].init = () => ({
-        children: secondClicked ? (<Text>limpando</Text>) : (<Text>limpar tela</Text>),
-        click: secondClicked
-    });
 
     return (
         <>

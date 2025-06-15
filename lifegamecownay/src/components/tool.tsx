@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Center } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 interface ToolProps {
@@ -40,7 +40,7 @@ export default function Tool({ props }: MetaTool) {
             p={1}
             onClick={OnClick}
         >
-            {children}
+            <Center textAlign={"center"}>{children}</Center>
         </Box>
     );
 }

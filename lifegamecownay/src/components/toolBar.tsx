@@ -12,10 +12,11 @@ interface ToolBarProps {
 }
 
 export default function ToolBar({ list }: ToolBarProps) {
-    const size_tools = 70;
+    const height = 100
+    const size_tools = height-11;
     const spacing = 11;
     const width = list.length * (size_tools + spacing);
-    const height = size_tools + 10
+    
 
     return (
         <Center>
