@@ -1,19 +1,56 @@
 import { parse } from "path";
-import draw from "./drawUtils"
-import vec from "./vec2"
+import draw from "./drawUtils";
+import vec from "./vec2";
 import { randomInt } from "./random";
 import { CanvasHTMLAttributes } from "react";
 
+// Declaração global organizada
 declare global {
-    var Game: any & {pause: boolean}
+    interface Window {
+        Game: GameType;
+    }
 }
 
+// Tipagem para o objeto Game
+type GameType = {
+    pause: boolean;
+    size: number;
+    WIDTH: number;
+    HEIGHT: number;
+    drawMode: "draw" | "erase";
+    t: number;
+    State: string;
+    mouse: {
+        x: number;
+        y: number;
+        click: boolean;
+    };
+    ambient: { pos: ReturnType<typeof vec>, alive: number }[][];
+    createAmbient: (f?: () => number) => typeof this.ambient;
+    addpoint: (x: number, y: number, alive?: number) => void;
+    drawPoints: (ctx: CanvasRenderingContext2D) => void;
+    updateAmbiente: () => void;
+    limparAmbient: () => void;
+    apagar_pixel?: (x: number, y: number) => void;
+    addANewPointInAmbient: (x: number, y: number) => void;
+    init: (state?: string, canvas?: HTMLCanvasElement) => void;
+    set_pause: (val: boolean) => void;
+    update: () => void;
+    draw: (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => void;
+    performAction: (x: number, y: number) => void;
+    handlePointerDown: (x: number, y: number) => void;
+    handlePointerMove: (x: number, y: number) => void;
+    handlePointerUp: () => void;
+};
+
 if (typeof window !== "undefined") {
+    // Variáveis do Game organizadas
     window.Game = {
         pause: false,
         size: 16,
-        WIDTH: 240/16,
-        HEIGHT: 136/16,
+        WIDTH: Math.floor(240 / 16),
+        HEIGHT: Math.floor(136 / 16),
+        drawMode: "draw",
         t: 0,
         State: "menuView",
         mouse: {
@@ -28,7 +65,7 @@ if (typeof window !== "undefined") {
             for (let x = 0; x < this.WIDTH; x++) {
                 const row = [];
                 for (let y = 0; y < this.HEIGHT; y++) {
-                    row.push({ pos: vec(x * this.size + x*0.15, y * this.size + y*0.15), alive: f ? f() : 0 });
+                    row.push({ pos: vec(x * this.size + x * 0.15, y * this.size + y * 0.15), alive: f ? f() : 0 });
                 }
                 arr.push(row);
             }
@@ -84,22 +121,22 @@ if (typeof window !== "undefined") {
             this.ambient = nextAmbient;
         },
 
-        limparAmbient(){
-            this.ambient = this.createAmbient()
+        limparAmbient() {
+            this.ambient = this.createAmbient();
         },
 
-        paga_pixel(x: number, y: number){
-            this.addANewPoint(x, y,0)
+        apagar_pixel(x: number, y: number) {
+            this.addpoint(x, y, 0);
         },
 
         addANewPointInAmbient(x: number, y: number) {
             this.addpoint(x, y, 1);
         },
 
-       init(state?: string, canvas?: HTMLCanvasElement) {
+        init(state?: string, canvas?: HTMLCanvasElement) {
             this.State = state || this.State;
-            this.WIDTH = window.innerWidth / this.size;
-            this.HEIGHT = window.innerHeight / this.size;
+            this.WIDTH = Math.floor(window.innerWidth / this.size);
+            this.HEIGHT = Math.floor(window.innerHeight / this.size);
             if (this.State === "draw") {
                 this.ambient = this.createAmbient(() => 0);
                 this.pause = true;
@@ -108,36 +145,46 @@ if (typeof window !== "undefined") {
             }
 
             if (this.State === "draw" && canvas) {
-                canvas.addEventListener('mousemove', (event) => {
-                    const rect = canvas.getBoundingClientRect();
-                    this.mouse.x = event.clientX - rect.left;
-                    this.mouse.y = event.clientY - rect.top;
-                    if (this.mouse.click) {
-                        const cellX = Math.floor(this.mouse.x / this.size);
-                        const cellY = Math.floor(this.mouse.y / this.size);
-                        this.addANewPointInAmbient(cellX, cellY);
-                    }
-                });
-
                 canvas.addEventListener('mousedown', (event) => {
                     const rect = canvas.getBoundingClientRect();
-                    this.mouse.x = event.clientX - rect.left;
-                    this.mouse.y = event.clientY - rect.top;
-                    this.mouse.click = true;
-
-                    const cellX = Math.floor(this.mouse.x / this.size);
-                    const cellY = Math.floor(this.mouse.y / this.size);
-                    this.addANewPointInAmbient(cellX, cellY);
+                    const x = event.clientX - rect.left;
+                    const y = event.clientY - rect.top;
+                    this.handlePointerDown(x, y);
                 });
-
+                canvas.addEventListener('mousemove', (event) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const x = event.clientX - rect.left;
+                    const y = event.clientY - rect.top;
+                    this.handlePointerMove(x, y);
+                });
                 canvas.addEventListener('mouseup', () => {
-                    this.mouse.click = false;
+                    this.handlePointerUp();
+                });
+                canvas.addEventListener('touchstart', (event) => {
+                    const touch = event.touches[0];
+                    const rect = canvas.getBoundingClientRect();
+                    const x = touch.clientX - rect.left;
+                    const y = touch.clientY - rect.top;
+                    this.handlePointerDown(x, y);
+                    event.preventDefault();
+                });
+                canvas.addEventListener('touchmove', (event) => {
+                    const touch = event.touches[0];
+                    const rect = canvas.getBoundingClientRect();
+                    const x = touch.clientX - rect.left;
+                    const y = touch.clientY - rect.top;
+                    this.handlePointerMove(x, y);
+                    event.preventDefault();
+                });
+                canvas.addEventListener('touchend', (event) => {
+                    this.handlePointerUp();
+                    event.preventDefault();
                 });
             }
         },
 
-        set_pause(val: boolean){
-            this.pause = val
+        set_pause(val: boolean) {
+            this.pause = val;
         },
 
         update() {
@@ -155,6 +202,37 @@ if (typeof window !== "undefined") {
             ctx.scale(1, 1);
             this.drawPoints(ctx);
             ctx.restore();
+        },
+
+        performAction(x: number, y: number) {
+            const cellX = Math.floor(x / this.size);
+            const cellY = Math.floor(y / this.size);
+            if (cellX >= 0 && cellX < this.WIDTH && cellY >= 0 && cellY < this.HEIGHT) {
+                if (this.drawMode === "draw") {
+                    this.addANewPointInAmbient(cellX, cellY);
+                } else if (this.drawMode === "erase") {
+                    this.addpoint(cellX, cellY, 0);
+                }
+            }
+        },
+
+        handlePointerDown(x: number, y: number) {
+            this.mouse.x = x;
+            this.mouse.y = y;
+            this.mouse.click = true;
+            this.performAction(x, y);
+        },
+
+        handlePointerMove(x: number, y: number) {
+            this.mouse.x = x;
+            this.mouse.y = y;
+            if (this.mouse.click) {
+                this.performAction(x, y);
+            }
+        },
+
+        handlePointerUp() {
+            this.mouse.click = false;
         }
     };
 }

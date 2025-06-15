@@ -1,9 +1,10 @@
-import { Box, Center } from "@chakra-ui/react";
+import { Box, Center, Image  } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 interface ToolProps {
     _onclick?: (clicked?: boolean) => { children: any, click: boolean },
-    init: () => { children: any, click: boolean }
+    init: () => { children: any, click: boolean },
+    icon?: string
 }
 
 interface MetaTool {
@@ -40,6 +41,7 @@ export default function Tool({ props }: MetaTool) {
             p={1}
             onClick={OnClick}
         >
+            {props.icon && <Image src={props.icon} alt="icon" mx="auto" mb={1} width={"100%"} imageRendering={"pixelated"}/>}
             <Center textAlign={"center"}>{children}</Center>
         </Box>
     );

@@ -1,12 +1,13 @@
 "use client";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Icon, Text } from "@chakra-ui/react";
 import GameCanvas from "lgc/components/gameCanvas";
 import ToolBar from "lgc/components/toolBar";
 import { useState, useRef, useEffect } from "react";
 
 export default function Draw() {
     const [secondClicked, setSecondClicked] = useState(false);
-    const [paused, setPaused] = useState(true); // novo estado
+    const [paused, setPaused] = useState(true);
+    const [drawMode, setDrawMode] = useState<"draw" | "erase">("draw");
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
@@ -20,7 +21,34 @@ export default function Draw() {
         };
     }, [secondClicked]);
 
+    
+    useEffect(() => {
+        if (window.Game) {
+            window.Game.drawMode = drawMode;
+        }
+    }, [drawMode]);
+
     const list = [
+        {
+            _onclick: () => {
+                setDrawMode("draw");
+                return { click: true };
+            },
+            init: () => ({
+                click: drawMode === "draw"
+            }),
+            icon: "/sprites/lapiz.png"
+        },
+        {
+            _onclick: () => {
+                setDrawMode("erase");
+                return { click: true };
+            },
+            init: () => ({
+                click: drawMode === "erase"
+            }),
+            icon: "/sprites/borracha.png"
+        },
         {
             _onclick: () => {
                 setPaused(true);

@@ -10,6 +10,9 @@ const config = defineConfig({
       p: 0,
       bg: "{colors.brand.braco}",
     },
+    "*":{
+      fontFamily: "Comic Sans MS"
+    },
   
     "h1, h2, h3, h4, h5, h6, p, a, ul, li": {
       fontWeight: 600,
