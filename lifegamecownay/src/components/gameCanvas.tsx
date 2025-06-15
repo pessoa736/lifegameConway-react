@@ -11,6 +11,7 @@ const GameCanvas = ({state}) => {
       if (!canvas) return;
 
       window.Game.init(state, canvas)
+      console.log(window.Game)
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
       const ctx = canvas.getContext("2d");
