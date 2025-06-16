@@ -53,7 +53,7 @@ export default function Tool({ props }: MetaTool) {
             {isLoading ? (
                 <Center>Carregando...</Center>
             ) : (
-                props.icon && <IMG src={props.icon} alt="icon" mx="auto" mb={1} width={"100%"} imageRendering={"pixelated"} />
+                props.icon && <IMG src={`${process.env.NEXT_PUBLIC_BASE_PATH}`+props.icon} alt="icon" mx="auto" mb={1} width={"100%"} imageRendering={"pixelated"} />
             )}
             <Center textAlign={"center"}>{children}</Center>
         </Box>

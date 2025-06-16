@@ -1,12 +1,15 @@
 import type { NextConfig } from "next";
 
 
-const isDeploy = process.env.NEXT_PUBLIC_DEPLOY === "true";
 const isGithubPages = process.env.GITHUB_ACTIONS || false;
+const repo = isGithubPages ? '/lifegameConway-react' : ''
 
 const nextConfig: NextConfig = {
-  basePath: isGithubPages ? '/lifegameConway-react' : '',
-  assetPrefix: isGithubPages ? '/lifegameConway-react/' : '',
+  basePath: repo,
+  assetPrefix: repo,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: repo
+  },
   output: (isGithubPages ?  "export" : undefined),
   reactStrictMode: true,
   webpack(config) {
