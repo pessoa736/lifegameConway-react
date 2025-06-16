@@ -90,7 +90,7 @@ export default function Draw() {
             <Box bg="pri" w="full" position={"absolute"}>
                 <GameCanvas state={"draw"} />
                 <ToolBar list={list} />
-                <BackButton href="./.." />
+                <BackButton href="/" />
             </Box>
         </>
     );

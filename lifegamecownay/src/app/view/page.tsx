@@ -56,13 +56,12 @@ export default function Draw(){
             })
         },
     ]
-
     return (
         <>
             <Box  bg="pri"  w="full" position={"absolute"} >
                 <GameCanvas state={"View"}/>
                 <ToolBar list={list}/>
-                <BackButton href="./.." />
+                <BackButton href={`/`} />
             </Box>
         </>
     )
