@@ -1,3 +1,4 @@
+![image](https://github.com/user-attachments/assets/e7c007c8-cd0f-4fe3-8110-eeb4521b3107)
 
 # lifegameConway-react
 
