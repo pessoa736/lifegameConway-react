@@ -25,6 +25,7 @@ export default function App() {
     {text: "Visualizar um cenario aleatorio", href: "./visualizacao"}
   ]
 
+  
   return (
     <Box w={screenSize.width} height={screenSize.height}>
       <Box bg="pri"  position={"absolute"}>
