@@ -1,9 +1,10 @@
-![alt text](img/image.png)
 
 # lifegameConway-react
 
 Uma implementação do famoso **Jogo da Vida** de Conway utilizando React.js.
-
+<div align="center">
+   <img src="img/image.png" />
+</div>
 ## Tecnologias Utilizadas
 
 - **React.js** para construção da interface.
