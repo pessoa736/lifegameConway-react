@@ -22,7 +22,7 @@ export default function App() {
 
   const buts = [
     {text: "Desenhar", href: "./draw"},
-    {text: "Visualizar um cenario aleatorio", href: "./view"}
+    {text: "Visualizar um cenario aleatorio", href: "./visualizacao"}
   ]
 
   return (
