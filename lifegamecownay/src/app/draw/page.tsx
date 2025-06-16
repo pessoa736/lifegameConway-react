@@ -1,5 +1,6 @@
 "use client";
 import { Box, Icon, Text } from "@chakra-ui/react";
+import BackButton from "lgc/components/backButton";
 import GameCanvas from "lgc/components/gameCanvas";
 import ToolBar from "lgc/components/toolBar";
 import { useState, useRef, useEffect } from "react";
@@ -89,6 +90,7 @@ export default function Draw() {
             <Box bg="pri" w="full" position={"absolute"}>
                 <GameCanvas state={"draw"} />
                 <ToolBar list={list} />
+                <BackButton href="./.." />
             </Box>
         </>
     );

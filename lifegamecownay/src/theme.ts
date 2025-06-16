@@ -11,7 +11,8 @@ const config = defineConfig({
       bg: "{colors.brand.braco}",
     },
     "*":{
-      fontFamily: "Comic Sans MS"
+      fontFamily: "Comic Sans MS",
+      scrollbar: "hidden"
     },
   
     "h1, h2, h3, h4, h5, h6, p, a, ul, li": {

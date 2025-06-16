@@ -1,5 +1,6 @@
 "use client"
 import { Box, Text } from "@chakra-ui/react";
+import BackButton from "lgc/components/backButton";
 import GameCanvas from "lgc/components/gameCanvas";
 import ToolBar from "lgc/components/toolBar";
 import { randomInt } from "lgc/utils/random";
@@ -61,6 +62,7 @@ export default function Draw(){
             <Box  bg="pri"  w="full" position={"absolute"} >
                 <GameCanvas state={"View"}/>
                 <ToolBar list={list}/>
+                <BackButton href="./.." />
             </Box>
         </>
     )
