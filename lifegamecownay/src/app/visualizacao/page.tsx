@@ -61,7 +61,7 @@ export default function Draw(){
             <Box  bg="pri"  w="full" position={"absolute"} >
                 <GameCanvas state={"View"}/>
                 <ToolBar list={list}/>
-                <BackButton href={`/`} />
+                <BackButton href={`/lifegameConway-react`} />
             </Box>
         </>
     )
