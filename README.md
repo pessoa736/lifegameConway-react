@@ -3,7 +3,7 @@
 
 Uma implementação do famoso **Jogo da Vida** de Conway utilizando React.js.
 <div align="center">
-   <img src="img/image.png" width="50%" />
+   <img src="img/image.png" height="350px" />
 </div>
 
 ## Tecnologias Utilizadas
